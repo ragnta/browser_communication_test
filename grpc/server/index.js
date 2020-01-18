@@ -1,5 +1,5 @@
 var PROTO_PATH = __dirname + '/../api/message.proto';
-
+const fs = require('fs');
 var grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 
@@ -20,8 +20,14 @@ function sayHello(_call, callback) {
     callback(null, {message: 'Hello World'});
 }
 
+function log(call, callback) {
+    fs.appendFileSync(`result${call.request.testcase}.csv`,"Number;DeltaTime\n"+call.request.result);
+    callback(null, {message: 'Hello World'});
+}
+
 server.addService(hello_proto.service.package.Greeter.service, {
-    sayHello: sayHello
+    sayHello: sayHello,
+    log: log
 })
 server.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
 server.start();

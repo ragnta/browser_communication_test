@@ -13,9 +13,19 @@ type GreeterSayHello = {
   readonly responseType: typeof message_pb.HelloReply;
 };
 
+type GreeterLog = {
+  readonly methodName: string;
+  readonly service: typeof Greeter;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof message_pb.LogRequest;
+  readonly responseType: typeof message_pb.HelloReply;
+};
+
 export class Greeter {
   static readonly serviceName: string;
   static readonly SayHello: GreeterSayHello;
+  static readonly Log: GreeterLog;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -57,6 +67,15 @@ export class GreeterClient {
   ): UnaryResponse;
   sayHello(
     requestMessage: message_pb.HelloRequest,
+    callback: (error: ServiceError|null, responseMessage: message_pb.HelloReply|null) => void
+  ): UnaryResponse;
+  log(
+    requestMessage: message_pb.LogRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: message_pb.HelloReply|null) => void
+  ): UnaryResponse;
+  log(
+    requestMessage: message_pb.LogRequest,
     callback: (error: ServiceError|null, responseMessage: message_pb.HelloReply|null) => void
   ): UnaryResponse;
 }

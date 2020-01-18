@@ -27,6 +27,30 @@ export namespace HelloRequest {
   }
 }
 
+export class LogRequest extends jspb.Message {
+  getResult(): string;
+  setResult(value: string): void;
+
+  getTestcase(): string;
+  setTestcase(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LogRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: LogRequest): LogRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: LogRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LogRequest;
+  static deserializeBinaryFromReader(message: LogRequest, reader: jspb.BinaryReader): LogRequest;
+}
+
+export namespace LogRequest {
+  export type AsObject = {
+    result: string,
+    testcase: string,
+  }
+}
+
 export class HelloReply extends jspb.Message {
   getMessage(): string;
   setMessage(value: string): void;

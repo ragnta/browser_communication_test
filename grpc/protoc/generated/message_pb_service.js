@@ -19,6 +19,15 @@ Greeter.SayHello = {
   responseType: message_pb.HelloReply
 };
 
+Greeter.Log = {
+  methodName: "Log",
+  service: Greeter,
+  requestStream: false,
+  responseStream: false,
+  requestType: message_pb.LogRequest,
+  responseType: message_pb.HelloReply
+};
+
 exports.Greeter = Greeter;
 
 function GreeterClient(serviceHost, options) {
@@ -31,6 +40,37 @@ GreeterClient.prototype.sayHello = function sayHello(requestMessage, metadata, c
     callback = arguments[1];
   }
   var client = grpc.unary(Greeter.SayHello, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+GreeterClient.prototype.log = function log(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(Greeter.Log, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

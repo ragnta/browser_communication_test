@@ -25,12 +25,19 @@ package helloworld.service.package;
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc Log(LogRequest) returns (HelloReply) {}
 }
 
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;
   string type = 2;
+}
+
+// The request message containing the user's name.
+message LogRequest {
+  string result = 1;
+  string testcase=2;
 }
 
 // The response message containing the greetings
